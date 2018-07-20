@@ -14,7 +14,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="">
+<html class="theme-next muse use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -112,10 +112,10 @@
 <meta name="keywords" content="zookeeper">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Zookeeper的选举三：Leader选举的实现细节">
-<meta property="og:url" content="http://yoursite.com/2017/11/02/zookeeper-5/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:url" content="http://www.thinkyixia.com/2017/11/02/zookeeper-5/index.html">
+<meta property="og:site_name" content="静水流深">
 <meta property="og:description" content="Leader选举的实现细节服务器的状态  LOOKING：寻找Leader状态，当服务器处于该状态时，会认为当前集群中没有leader，因此需要进入leader选举流程 FOLLOWING：跟随者状态，当前服务器是Follower LEADING：领导者状态，当前服务器为Leader OBSERVING：观察者状态，当前服务器角色是Observer  Vote数据结构说明  id：被推举的lead">
-<meta property="og:locale" content="default">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-11-01T16:00:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Zookeeper的选举三：Leader选举的实现细节">
@@ -123,10 +123,12 @@
 
 
 
+  <link rel="alternate" href="/atom.xml" title="静水流深" type="application/atom+xml" />
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/11/02/zookeeper-5/"/>
+
+  <link rel="canonical" href="http://www.thinkyixia.com/2017/11/02/zookeeper-5/"/>
 
 
 
@@ -136,7 +138,7 @@
   };
 </script>
 
-  <title>Zookeeper的选举三：Leader选举的实现细节 | Hexo</title>
+  <title>Zookeeper的选举三：Leader选举的实现细节 | 静水流深</title>
   
 
 
@@ -176,7 +178,7 @@
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
   
   
@@ -194,10 +196,14 @@
     <div class="custom-logo-site-title">
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Hexo</span>
+        <span class="site-title">静水流深</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
+    
+      
+        <p class="site-subtitle">Just For Fun</p>
+      
     
   </div>
 
@@ -281,16 +287,16 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/02/zookeeper-5/">
+    <link itemprop="mainEntityOfPage" href="http://www.thinkyixia.com/2017/11/02/zookeeper-5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
+      <meta itemprop="name" content="那个谁">
+      <meta itemprop="description" content="吾资之昏，不逮人也，吾材之庸，不逮人也；旦旦而学之，久而不怠焉，迄乎成，而亦不知其昏与庸也。吾资之聪，倍人也，吾材之敏，倍人也；屏弃而不用，其与昏与庸无以异也。圣人之道，卒于鲁也传之。然则昏庸聪敏之用，岂有常哉？">
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="静水流深">
     </span>
 
     
@@ -400,14 +406,14 @@
 <li>senderWorkerMap：发送器集合。每个SendWorker消息发送器，都对应一台远程Zookeeper服务器，负责消息的发送。在senderWorkerMap中，也按照SID进行了分组</li>
 <li>lastMessageSent：最近发送过的消息。这个集合中，为每个SID保留最近发送过的一个消息。</li>
 </ul>
-<ol start="2">
+<ol>
 <li>建立连接<br>QuorumCnxManager在启动的时候，会创建一个ServerSocket来监听leader选举的通信端口（默认3888）。开启端口监听后，Zookeeper会不断的接收到来自其他服务器的“创建连接”请求，在接收到其他服务器的TCP连接请求时，会交给receiveConnection函数来处理。<br>为了避免两台机器之间重复创建TCP连接，zookeeper设计了一种建立TCP连接的规则：<blockquote>
 <p>只允许SID大的服务器主动和其他服务器建立连接，否则断开连接。<br>服务器接收到请求后，如果发现当前服务器的SID比接收到的大，就断开连接，然后自己主动去和远程服务器建立连接</p>
 </blockquote>
 </li>
 </ol>
 <p>一旦建立连接，就会根据远程服务器的SID创建相应的消息发送器SendWorker和消息接收器RecvWorker，并启动他们。</p>
-<ol start="3">
+<ol>
 <li><p>消息接收和发送<br>在完成选票的初始化之后，服务器就会发起第一次投票。Zookeeper会将刚刚初始化好的选票放入sendqueue队列中，由发送器WorkerSender负责发送出去</p>
 </li>
 <li><p>接收外部投票<br>每台服务器会不断的从recvqueue队列中获取外部投票。如果服务器发现无法获取到任何的外部投票，那么就会立即确认自己是否和集群中其他服务器保持着有效连接。如果发现没有建立连接，就马上建立连接；如果已经建立了连接，那么就再次发送自己当前的内部投票。</p>
@@ -421,7 +427,7 @@
 <li>外部投票的选举轮次和内部投票一样<br>直接根据对比逻辑进行PK</li>
 </ul>
 <p>只有在统一选举轮次的投票才是有效的</p>
-<ol start="6">
+<ol>
 <li>选票PK</li>
 </ol>
 <ul>
@@ -429,7 +435,7 @@
 <li>如果投票轮次一样，就比较两者的SID。如果外部投票的ZXID大于内部投票，就进行投票变更。小于就不变</li>
 <li>如果两者ZXID一样，那么就比对两者的SID。如果外部投票的SID大于内部投票，那么就需要进行投票变更。小于就忽略</li>
 </ul>
-<ol start="7">
+<ol>
 <li><p>变更投票<br>如果PK失败，那么就使用外部投票信息覆盖内部投票信息。变更完成后，再次将这个变更后的内部投票发送出去</p>
 </li>
 <li><p>选票归档<br>无论是否进行了投票更新，都会将刚刚收到的那部分外部投票放入“选票集合” recvset中进行归档。<br>recvset用于记录当前服务器在本轮次的leader选举中收到的所有外部投票，按照对应的SID来区分</p>
@@ -546,8 +552,8 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <p class="site-author-name" itemprop="name">John Doe</p>
-              <p class="site-description motion-element" itemprop="description"></p>
+              <p class="site-author-name" itemprop="name">那个谁</p>
+              <p class="site-description motion-element" itemprop="description">吾资之昏，不逮人也，吾材之庸，不逮人也；旦旦而学之，久而不怠焉，迄乎成，而亦不知其昏与庸也。吾资之聪，倍人也，吾材之敏，倍人也；屏弃而不用，其与昏与庸无以异也。圣人之道，卒于鲁也传之。然则昏庸聪敏之用，岂有常哉？</p>
           </div>
 
           
@@ -654,6 +660,13 @@
           
 
           
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
 
           
 
@@ -705,7 +718,7 @@
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">John Doe</span>
+  <span class="author" itemprop="copyrightHolder">那个谁</span>
 
   
 
