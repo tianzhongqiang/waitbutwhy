@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="保费收入保险公司的保费收入分为三种  原保险保费收入 保户投资款新增交费 投连险独立账户新增交费对于任何一家保险公司来说，这三者之和称为规模保费，而将原保险收入称为保费收入。  所有保险的产品分为三类  纯保障性保险 保障储蓄性保险 纯投资性保险那这三类保险都是怎么确认保费收入的呢，是确认为原保险保费收入、保户投资款新增交费，还是投连险独立账户新增交费呢？那我们分别讨论一下。  纯保障性保险产生">
+<meta name="keywords" content="保险">
+<meta property="og:type" content="article">
+<meta property="og:title" content="保险学习笔记1：保险公司保费收入">
+<meta property="og:url" content="http://yoursite.com/2018/04/12/baoxian-1/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="保费收入保险公司的保费收入分为三种  原保险保费收入 保户投资款新增交费 投连险独立账户新增交费对于任何一家保险公司来说，这三者之和称为规模保费，而将原保险收入称为保费收入。  所有保险的产品分为三类  纯保障性保险 保障储蓄性保险 纯投资性保险那这三类保险都是怎么确认保费收入的呢，是确认为原保险保费收入、保户投资款新增交费，还是投连险独立账户新增交费呢？那我们分别讨论一下。  纯保障性保险产生">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/images/baoxian-1.png">
+<meta property="og:image" content="http://yoursite.com/images/baoxian-2.png">
+<meta property="og:updated_time" content="2018-04-11T16:00:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="保险学习笔记1：保险公司保费收入">
+<meta name="twitter:description" content="保费收入保险公司的保费收入分为三种  原保险保费收入 保户投资款新增交费 投连险独立账户新增交费对于任何一家保险公司来说，这三者之和称为规模保费，而将原保险收入称为保费收入。  所有保险的产品分为三类  纯保障性保险 保障储蓄性保险 纯投资性保险那这三类保险都是怎么确认保费收入的呢，是确认为原保险保费收入、保户投资款新增交费，还是投连险独立账户新增交费呢？那我们分别讨论一下。  纯保障性保险产生">
+<meta name="twitter:image" content="http://yoursite.com/images/baoxian-1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/04/12/baoxian-1/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>保险学习笔记1：保险公司保费收入 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/12/baoxian-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">保险学习笔记1：保险公司保费收入
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-04-12 00:00:00" itemprop="dateCreated datePublished" datetime="2018-04-12T00:00:00+08:00">2018-04-12</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/保险/" itemprop="url" rel="index"><span itemprop="name">保险</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="/images/baoxian-1.png" alt=""><br><img src="/images/baoxian-2.png" alt=""></p>
+<h1 id="保费收入"><a href="#保费收入" class="headerlink" title="保费收入"></a>保费收入</h1><p>保险公司的保费收入分为三种</p>
+<ul>
+<li>原保险保费收入</li>
+<li>保户投资款新增交费</li>
+<li>投连险独立账户新增交费<br>对于任何一家保险公司来说，这三者之和称为规模保费，而将原保险收入称为保费收入。</li>
+</ul>
+<p>所有保险的产品分为三类</p>
+<ul>
+<li>纯保障性保险</li>
+<li>保障储蓄性保险</li>
+<li>纯投资性保险<br>那这三类保险都是怎么确认保费收入的呢，是确认为原保险保费收入、保户投资款新增交费，还是投连险独立账户新增交费呢？<br>那我们分别讨论一下。</li>
+</ul>
+<h2 id="纯保障性保险产生原保费收入"><a href="#纯保障性保险产生原保费收入" class="headerlink" title="纯保障性保险产生原保费收入"></a>纯保障性保险产生原保费收入</h2><p>纯保障性保险又称为消费性保险，期限都在1年或1年以下，如各类的财险、意外险、医疗险等。这类保险的特点是只有保障功能，保单没有现金价值或账户价值，即没有任何投资功能。</p>
+<p>对于纯保障性保险，客户缴纳保费后，自然就形成了保险公司的“原保险保费收入”。</p>
+<p>其中财产保险公司主要经营的就是纯保障性保险（也有少量的投资性产品），所以保监会给的财险公司的收入情况中只有原保险保费收入。</p>
+<h2 id="纯投资性保险产生投资款"><a href="#纯投资性保险产生投资款" class="headerlink" title="纯投资性保险产生投资款"></a>纯投资性保险产生投资款</h2><p>纯投资性保险是指没有任何保障功能的保险，对于这类合同，保险公司将其确认为“非保险合同”，将收到的保费确认为投资款。<br>如果合同是投连险，就将其保费计入“投连险独立账户新增交费”；<br>如果是其它保险，就计入”保户投资款新增交费”。</p>
+<p>这类保险规模不会太大，像之前平安保险旗下的万能险就是这样的，归类为非保险合同。</p>
+<h2 id="保障储蓄性保险"><a href="#保障储蓄性保险" class="headerlink" title="保障储蓄性保险"></a>保障储蓄性保险</h2><p>1、保障储蓄性保险的特点<br>保障储蓄性保险既有保障功能，又有储蓄投资功能。期限一般在1年以上。<br>像终身寿险、长期重疾险、两全保险都属于保障储蓄性保险。</p>
+<p>2、保障储蓄性保险的4种形式</p>
+<ul>
+<li>普通寿险<br>为客户的现金价值支付固定利率的复利利息，称为预定利率。由于利率固定，所以保单现金价值在整个保险期限内都是预先确定的。</li>
+<li>分红险<br>为客户的现金价值提供保底利率，当前市场上保底利率多为2.5%左右，每年分红一次，红利主要取决于经营分红险的当年盈余</li>
+<li>万能险（现已取消）<br>为客户的现金价值提供保底利率，当前市场上保底利率多为2.5%左右，每个月公布或调整一次结算利率</li>
+<li>投资连结保险（跟基金公司一个模式）<br>类似于买基金，大部分资金投资于股票市场，客户承担风险，保险公司只收取资产管理费。</li>
+</ul>
+<p>3、保障储蓄性保险的保费收入确认<br>那保障储蓄性保险的保费收入是怎么确认的呢？<br>对于保障储蓄性保险来说，看起来保险公司既可以将其认为是保险合同，进而确认为保费收入；<br>也可以认为是非保险合同，进而产生“投资款”。<br>如果没有相应规范，保险公司往往会将其全部归为保费收入，但是显然政策是不会没有任何规范的。<br>为什么保险公司会希望将所有收入都归为保费收入呢？<br>很简单，规模收入中保费收入占比越高，越可以体现自己是一家保险公司，而且也可以符合监管机构“保险姓保”的要求</p>
+<p>1) 政策规定与保险公司选择<br>2009年12月，财政部颁发了财会[2009]15号文“关于印发《保险合同相关会计处理规定》的通知”，专门明确了保障储蓄性保险的保费确认问题。</p>
+<blockquote>
+<p>《保险合同相关会计处理规定》相关规定（摘录）：</p>
+<ul>
+<li>1、保险人与投保人签订的合同，使保险人既承担保险风险又承担其他风险的，应当分别下列情况进行处理：<br>（1）保险风险部分和其他风险部分能够区分，并且能够单独计量的，应当将保险风险部分和其他风险部分进行分拆。保险风险部分，确定为保险合同；其他风险部分，不确定为保险合同。<br>（2）保险风险部分和其他风险部分不能够区分，或者虽能够区分但不能够单独计量的，如果保险风险重大，应当将整个合同确定为保险合同；如果保险风险不重大，不应当将整个合同确定为保险合同。</li>
+<li>2、保险人与投保人签订的需要进行重大保险风险测试的合同，应当在合同初始确认日进行重大保险风险测试。测试结果表明，发生合同约定的保险事故可能导致保险人支付重大附加利益的，即认定该保险风险重大。附加利益，是指保险人在发生保险事故时的支付额，超过不发生保险事故时的支付额的金额。</li>
+</ul>
+</blockquote>
+<p>什么意思呢，就是说看该保障储蓄性保险能不能将保险部分和其它（投资）部分拆分开，如果可以，就将拆分开的保险分别归入保险合同和非保险合同，这样也就自然确认了“保费收入”和“投资款”；<br>如果不好区分，那就需要看这个保险是保险风险更大还是其它风险更大了。这个就需要进行保险风险测试。</p>
+<p>在上面提到的保障储蓄性保险的4种形式中，其中万能险和投连险比较容易拆分，而普通寿险和分红险需要进行风险测试。<br>2）对万能险和投连险进行拆分<br>万能险为客户设有个人帐户，投连险为客户设置投资账户。<br>客户购买万能险或者投连险之后，进入个人帐户或投资账户的钱，不计入保费收入，确认为“保户投资款新增交费”；<br>未进入的那部分保费，确认为“原保费收入”</p>
+<p>3）对普通寿险和分红险进行重大保险风险测试<br>主要看是保险风险大还是其它风险大。而怎么量化这个大呢，看一下中国人寿的风险测试结果。</p>
+<blockquote>
+<p>中国人寿如何进行重大保险风险测试<br>（摘自中国人寿2014年年报）<br>如果原保险保单“保险风险比例”在保险期间的一个或多个时点大于等于5%，则确认为保险合同。<br>保险风险比例=(保险事故发生情境下保险人支付的金额-保险事故不发生情境下保险人支付的金额)/保险事故不发生情境下的保险人支付的金额×100%</p>
+</blockquote>
+<p>按中国人寿的测试来看，只要把保险产品设计成“保险金超过账户价值或现金价值5%”就可以认为整个合同是保险合同。<br>所以，这样的测试还是非常宽松的。</p>
+<hr>
+<p>学习资料来自微信公众号：保险神潭</p>
+<p>数据来着保监会：<br><a href="http://bxjg.circ.gov.cn/web/site0/tab5202/info4103695.htm" target="_blank" rel="noopener">http://bxjg.circ.gov.cn/web/site0/tab5202/info4103695.htm</a></p>
+<hr>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/保险/" rel="tag"># 保险</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/03/zero2one1/" rel="next" title="从0到1-读后感（一）">
+                <i class="fa fa-chevron-left"></i> 从0到1-读后感（一）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/13/baoxian-2/" rel="prev" title="保险学习笔记2：理解保险负债">
+                保险学习笔记2：理解保险负债 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">46</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">categories</span>
+                  
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">26</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#保费收入"><span class="nav-number">1.</span> <span class="nav-text">保费收入</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#纯保障性保险产生原保费收入"><span class="nav-number">1.1.</span> <span class="nav-text">纯保障性保险产生原保费收入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#纯投资性保险产生投资款"><span class="nav-number">1.2.</span> <span class="nav-text">纯投资性保险产生投资款</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#保障储蓄性保险"><span class="nav-number">1.3.</span> <span class="nav-text">保障储蓄性保险</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Muse</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

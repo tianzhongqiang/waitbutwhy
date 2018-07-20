@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="leader选举是zookeeper中最重要的技术之一，也是保证分布式数据一致性的关键所在。我们主要从leader选举概述、算法分析和实现细节三个方面来看一下zookereper leader选举的过程。 Zookeeper选举概述服务器启动时leader的选举以3台机器为例，当集群中启动一台机器的时候，是无法进行选举的，当第二台机器也启动后，此时这两台机器已经能相互通信，每台机器试图找到一个le">
+<meta name="keywords" content="zookeeper">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Zookeeper的选举一：选举概述">
+<meta property="og:url" content="http://yoursite.com/2017/11/02/zookeeper-3/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="leader选举是zookeeper中最重要的技术之一，也是保证分布式数据一致性的关键所在。我们主要从leader选举概述、算法分析和实现细节三个方面来看一下zookereper leader选举的过程。 Zookeeper选举概述服务器启动时leader的选举以3台机器为例，当集群中启动一台机器的时候，是无法进行选举的，当第二台机器也启动后，此时这两台机器已经能相互通信，每台机器试图找到一个le">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2017-11-01T16:00:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Zookeeper的选举一：选举概述">
+<meta name="twitter:description" content="leader选举是zookeeper中最重要的技术之一，也是保证分布式数据一致性的关键所在。我们主要从leader选举概述、算法分析和实现细节三个方面来看一下zookereper leader选举的过程。 Zookeeper选举概述服务器启动时leader的选举以3台机器为例，当集群中启动一台机器的时候，是无法进行选举的，当第二台机器也启动后，此时这两台机器已经能相互通信，每台机器试图找到一个le">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/11/02/zookeeper-3/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Zookeeper的选举一：选举概述 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/02/zookeeper-3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Zookeeper的选举一：选举概述
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2017-11-02 00:00:00" itemprop="dateCreated datePublished" datetime="2017-11-02T00:00:00+08:00">2017-11-02</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>leader选举是zookeeper中最重要的技术之一，也是保证分布式数据一致性的关键所在。<br>我们主要从leader选举概述、算法分析和实现细节三个方面来看一下zookereper leader选举的过程。</p>
+<h1 id="Zookeeper选举概述"><a href="#Zookeeper选举概述" class="headerlink" title="Zookeeper选举概述"></a>Zookeeper选举概述</h1><h2 id="服务器启动时leader的选举"><a href="#服务器启动时leader的选举" class="headerlink" title="服务器启动时leader的选举"></a>服务器启动时leader的选举</h2><p>以3台机器为例，当集群中启动一台机器的时候，是无法进行选举的，当第二台机器也启动后，此时这两台机器已经能相互通信，每台机器试图找到一个leader，于是便进入了leader选举流程。<br>1、每个Server会发出一个投票<br>  投票包含的最基本的元素包括：所推举的服务器的myid和ZXID，我们以（myid，ZXID）形式表示。初始阶段，无论是server1还是server2都会投给自己，即server1的选票（1，0），server2的选票（2，0），然后各自将这个投票发送给集群中其他所有机器。<br>2、接收来自各个服务器的投票<br>  每个服务器都会收到其他服务器的投票。收到投票后，首先判断该投票的有效性，包括检查是否是本轮投票、是否来自looking状态的服务器<br>3、处理投票<br>  在接收到来自其他服务器的投票后，针对每一个投票，服务器都需要将别人的投票和自己的投票进行PK。<br>  PK规则如下：<br>  优先检查ZXID。ZXID比较大的服务器优先作为leader。（选择ZXID大的服务器主要是省去了新的leader产生之后，删除其他服务器上比自己ZXID大Proposal(提议)）<br>  如果ZXID相同的话，那么就比较myid。myid比较大的服务器作为leader。</p>
+<p>  按以上规则，server1的投票为（1，0），收到的server2投票为（2，0）；首先对比ZXID，都是0，然后对比myid，收到的投票myid为2，大于自己的，于是就会更新自己的投票为（2，0），然后重新将投票发出去。<br>  对于server2，不需要更新自己的投票信息，只是再一次向集群中所有机器发出上一次的投票信息即可。<br>4、统计投票<br>  每次投票后，服务器都会统计所有投票，判断是否已经有过半的机器接收到相同的投票信息。<br>  对于server1和server2服务器来说，都统计出集群中已经有两台机器接受了（2，0）这个投票信息。就是说集群中已经有过半的机器收到同样的选票（2，0），即可以认为已经选出了leader。<br>  过半：过半的意思是指大于集群机器数量的一半，即大于（n／2）。这也是zookeeper推举为奇数台的原因，3台允许出问题的机器为1台，4台允许出问题的机器也是1台（需要保证存活的机器大于4/2）；而且还增加了选主的时间。<br>5、一旦确定了leader，每个服务器都会更新自己的状态，如果是follower，更新为FOLLOWING，如果是leader，那么就更改为LEADING。</p>
+<h2 id="服务器运行期间leader选举"><a href="#服务器运行期间leader选举" class="headerlink" title="服务器运行期间leader选举"></a>服务器运行期间leader选举</h2><p>在zookeeper集群正常运行时，一旦选出了一个leader，那么所有服务器的集群角色一般不会发生变化。但是一旦leader所在的机器挂了，那么整个集群将暂时无法对外服务，而是进行新一轮的leader选举。<br>服务器运行期间的leader选举和启动时期的leader选举基本一样。<br>假设当前zookeeper服务器为3台，分别为server1，server2，server3，当前leader为server2。假设某一瞬间，leader挂了，此时就开始leader选举。<br>1、首先是变更状态<br>  当leader挂了，余下的非Observer服务器会将自己的服务器状态变更为LOOKING，然后开始进入Leader选举流程<br>2、每个Server会发出一个投票<br>  每个需要投票的server都生成一个投票信息（myid，ZXID），由于是运行期间，因此每个服务器上的ZXID可能不同，假设server1的ZXID为100，而server3的ZXID为99。在第一轮投票中还是都投给自己，分别产生投票（1，100）和（3，99），然后各自将这个投票发送给集群中所有机器。<br>3、接收来自各自服务器的投票<br>4、处理投票<br>  根据上面的处理规则，由于server1的ZXID为100，大于server3的ZXID，那么server3会成为leader<br>5、统计投票<br>6、改变服务器状态</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/zookeeper/" rel="tag"># zookeeper</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/02/zookeeper-5/" rel="next" title="Zookeeper的选举三：Leader选举的实现细节">
+                <i class="fa fa-chevron-left"></i> Zookeeper的选举三：Leader选举的实现细节
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/02/zookeeper-4/" rel="prev" title="Zookeeper的选举二：Leader选举的算法分析">
+                Zookeeper的选举二：Leader选举的算法分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">46</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">categories</span>
+                  
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">26</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Zookeeper选举概述"><span class="nav-number">1.</span> <span class="nav-text">Zookeeper选举概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#服务器启动时leader的选举"><span class="nav-number">1.1.</span> <span class="nav-text">服务器启动时leader的选举</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务器运行期间leader选举"><span class="nav-number">1.2.</span> <span class="nav-text">服务器运行期间leader选举</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Muse</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

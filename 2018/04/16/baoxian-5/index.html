@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="从财险公司的盈利来看，即使不考虑用保险准备金投资带来的投资收益，财险业务本身就可以盈利，即用保费收入扣除赔付支出和其它费用支出后，业务质量较好的财险公司就可以获得承保利润。 这正是财险公司与其它金融中介如商业银行、信托公司、基金公司、资产管理公司的不同之处。金融中介：主要功能是将资金从盈余方转移至需求方，其中商业银行从储户获取资金时，需要支付固定利率的利息；其它金融中介通常不承诺固定利率的利息，但">
+<meta name="keywords" content="保险">
+<meta property="og:type" content="article">
+<meta property="og:title" content="保险学习笔记5： 财险公司是如何通过承保业务赚钱的？（上）">
+<meta property="og:url" content="http://yoursite.com/2018/04/16/baoxian-5/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="从财险公司的盈利来看，即使不考虑用保险准备金投资带来的投资收益，财险业务本身就可以盈利，即用保费收入扣除赔付支出和其它费用支出后，业务质量较好的财险公司就可以获得承保利润。 这正是财险公司与其它金融中介如商业银行、信托公司、基金公司、资产管理公司的不同之处。金融中介：主要功能是将资金从盈余方转移至需求方，其中商业银行从储户获取资金时，需要支付固定利率的利息；其它金融中介通常不承诺固定利率的利息，但">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-04-15T16:00:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="保险学习笔记5： 财险公司是如何通过承保业务赚钱的？（上）">
+<meta name="twitter:description" content="从财险公司的盈利来看，即使不考虑用保险准备金投资带来的投资收益，财险业务本身就可以盈利，即用保费收入扣除赔付支出和其它费用支出后，业务质量较好的财险公司就可以获得承保利润。 这正是财险公司与其它金融中介如商业银行、信托公司、基金公司、资产管理公司的不同之处。金融中介：主要功能是将资金从盈余方转移至需求方，其中商业银行从储户获取资金时，需要支付固定利率的利息；其它金融中介通常不承诺固定利率的利息，但">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/04/16/baoxian-5/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>保险学习笔记5： 财险公司是如何通过承保业务赚钱的？（上） | Hexo</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/16/baoxian-5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">保险学习笔记5： 财险公司是如何通过承保业务赚钱的？（上）
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-04-16 00:00:00" itemprop="dateCreated datePublished" datetime="2018-04-16T00:00:00+08:00">2018-04-16</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/保险/" itemprop="url" rel="index"><span itemprop="name">保险</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>从财险公司的盈利来看，即使不考虑用保险准备金投资带来的投资收益，财险业务本身就可以盈利，即用保费收入扣除赔付支出和其它费用支出后，业务质量较好的财险公司就可以获得承保利润。</p>
+<p>这正是财险公司与其它金融中介如商业银行、信托公司、基金公司、资产管理公司的不同之处。<br>金融中介：主要功能是将资金从盈余方转移至需求方，其中商业银行从储户获取资金时，需要支付固定利率的利息；<br>其它金融中介通常不承诺固定利率的利息，但是会向资金提供者收取资产管理费，或者对投资收益进行分成；<br>也就是说，金融中介公司一般需要为资金提供者支付利息或创造投资价值，但是财险公司却无需为资金提供者支付利息和创造投资收益。</p>
+<p>巴菲特喜欢财险公司，主要是可以使用大量的低成本保险准备金进行投资而获利。</p>
+<p>这部分主要讨论，在不考虑投资收益的情况下，财险公司是如何赚钱或盈利的？</p>
+<h1 id="一个简化的财险承保业务分析模型"><a href="#一个简化的财险承保业务分析模型" class="headerlink" title="一个简化的财险承保业务分析模型"></a>一个简化的财险承保业务分析模型</h1><p>一个简单的案例：</p>
+<blockquote>
+<p>假定美能达财险公司只从事1年期财险业务，2015年，其所有保险业务都是2015年1月1日凌晨0点承保生效的，生效时收到保费总额为100亿元，所有保单都是2015年12月31日24时到期。为了获得这些保险业务，2015年初支出手续费及佣金20亿元，当年公司支出业务管理费15亿元，上交营业税及附加5亿元，当年赔付55亿元，当年所有保险事故的赔款均已全部支付给了客户。</p>
+</blockquote>
+<p>在不考虑投资收益的情况下，公司的承保利润有多少？如何度量该公司承保业务的绩效呢？<br>1、 承保利润的计算<br>承保利润=保费-赔付-（手续费佣金+业务管理费+营业税及附加）<br>=100-55-（20+15+5）=5（亿元）</p>
+<p>2、 承保业务绩效指标<br>可以用赔付率、成本率和承保利润率来测算承保绩效，即<br>赔付率=赔付/保费=55/100=55%<br>成本率=（赔付+其它各种支出）/保费=95/100=95%<br>承保利润率=1-成本率=5%<br>说明，美能达财险公司没收100元保费，赔付支出55元，其它支出40元，承保利润5元。</p>
+<p>显然，赔付率越低、成本率越低，承保利润越高，业绩就越好</p>
+<p>3、 实际情况下<br>实际情况下，财险公司比上面的案例更复杂一些，主要是三点：<br>第一，财险公司的业务，不止有保险业务，也有非保险业务（保户储金及投资款业务），我们计算承保业务的收入、支出、利润时，通常只考虑保险业务，不考虑非保险业务。</p>
+<p>第二，财险公司有分出、分入业务。在计算保费收入时需要增加分入保费、扣除分出保费在计算赔付支出的时候，需要扣除从分入人哪里得到的“摊回赔付支出”；此外，分入、分出业务回带来分保费用和摊回分保费用，即财险公司做为分入人要为分出人支付分保费用（分保佣金），做为分出人则可以从分入人那里收到或摊回分保费用</p>
+<p>第三，除少量保险外，绝大多数保险都是1年期的，基本都是跨会计年度的，因此，按照权责发生制，在计算承保业务收入时，需要将未到期责任准备金扣除</p>
+<h1 id="承保收入：已赚保费"><a href="#承保收入：已赚保费" class="headerlink" title="承保收入：已赚保费"></a>承保收入：已赚保费</h1><p>1、理解已赚保费<br>考虑到分入、分出因素和保险合同跨会计年度需要适用责权发生制的因素，我们将对应于当期的实际保费收入称为“已赚保费”</p>
+<blockquote>
+<p>已赚保费=保费收入+（分入保费-分出保费）-（期末未到期责任准备金-期初未到期责任准备金）=保费收入+分入保费-分出保费-提提取未到期责任准备金</p>
+</blockquote>
+<p>其中，提取未到期责任准备金=期末未到期责任准备金-期初未到期责任准备金。可以这样理解，因为财险基本都是1年的合同，所以期初未到期的责任准备金，今年全部都可以到期，然后转化称收入，而期末未到期的基本都是今年交的，这部分在算已赚保费的时候需要扣除。</p>
+<p>2、已赚保费案例</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/保险/" rel="tag"># 保险</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/14/baoxian-4/" rel="next" title="保险学习笔记4： 保险负债计量下（保险公司到底欠客户多少钱？）">
+                <i class="fa fa-chevron-left"></i> 保险学习笔记4： 保险负债计量下（保险公司到底欠客户多少钱？）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/18/baoxian-6/" rel="prev" title="偿一代&偿二代体系下的内含价值计算">
+                偿一代&偿二代体系下的内含价值计算 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">46</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">categories</span>
+                  
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">26</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一个简化的财险承保业务分析模型"><span class="nav-number">1.</span> <span class="nav-text">一个简化的财险承保业务分析模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#承保收入：已赚保费"><span class="nav-number">2.</span> <span class="nav-text">承保收入：已赚保费</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Muse</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

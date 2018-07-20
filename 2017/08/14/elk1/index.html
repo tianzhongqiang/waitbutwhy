@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="部署环境Elasticsearch:2.4.0kibana:4.6.0logstash:2.0.0 注：Elasticsearch、Kibana、Lostash的下载地址统一为https://www.elastic.co/downloads/ 安装Elasticsearch集群安装Elasticsearch解压elasticsearch-2.4.0.tar.gz，修改配置文件：config/ela">
+<meta name="keywords" content="elk">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ELK搭建使用">
+<meta property="og:url" content="http://yoursite.com/2017/08/14/elk1/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="部署环境Elasticsearch:2.4.0kibana:4.6.0logstash:2.0.0 注：Elasticsearch、Kibana、Lostash的下载地址统一为https://www.elastic.co/downloads/ 安装Elasticsearch集群安装Elasticsearch解压elasticsearch-2.4.0.tar.gz，修改配置文件：config/ela">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/images/elk-1.png">
+<meta property="og:image" content="http://yoursite.com/images/elk-2.png">
+<meta property="og:image" content="http://yoursite.com/images/elk-15.png">
+<meta property="og:image" content="http://yoursite.com/images/elk-13.png">
+<meta property="og:image" content="http://yoursite.com/images/elk-3.png">
+<meta property="og:image" content="http://yoursite.com/images/elk-14.png">
+<meta property="og:image" content="http://yoursite.com/images/elk-4.png">
+<meta property="og:image" content="http://yoursite.com/images/elk-11.png">
+<meta property="og:image" content="http://yoursite.com/images/elk-12.png">
+<meta property="og:image" content="http://yoursite.com/images/elk-16.png">
+<meta property="og:image" content="http://yoursite.com/images/elk-5.png">
+<meta property="og:image" content="http://yoursite.com/images/elk-8.png">
+<meta property="og:image" content="http://yoursite.com/images/elk-6.png">
+<meta property="og:image" content="http://yoursite.com/images/elk-7.png">
+<meta property="og:image" content="http://yoursite.com/images/elk-9.png">
+<meta property="og:image" content="http://yoursite.com/images/elk-10.png">
+<meta property="og:updated_time" content="2017-08-13T16:00:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ELK搭建使用">
+<meta name="twitter:description" content="部署环境Elasticsearch:2.4.0kibana:4.6.0logstash:2.0.0 注：Elasticsearch、Kibana、Lostash的下载地址统一为https://www.elastic.co/downloads/ 安装Elasticsearch集群安装Elasticsearch解压elasticsearch-2.4.0.tar.gz，修改配置文件：config/ela">
+<meta name="twitter:image" content="http://yoursite.com/images/elk-1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/08/14/elk1/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>ELK搭建使用 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/14/elk1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ELK搭建使用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2017-08-14 00:00:00" itemprop="dateCreated datePublished" datetime="2017-08-14T00:00:00+08:00">2017-08-14</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="部署环境"><a href="#部署环境" class="headerlink" title="部署环境"></a>部署环境</h1><p>Elasticsearch:2.4.0<br>kibana:4.6.0<br>logstash:2.0.0</p>
+<p>注：Elasticsearch、Kibana、Lostash的下载地址统一为<a href="https://www.elastic.co/downloads/" target="_blank" rel="noopener">https://www.elastic.co/downloads/</a></p>
+<h1 id="安装Elasticsearch集群"><a href="#安装Elasticsearch集群" class="headerlink" title="安装Elasticsearch集群"></a>安装Elasticsearch集群</h1><h2 id="安装Elasticsearch"><a href="#安装Elasticsearch" class="headerlink" title="安装Elasticsearch"></a>安装Elasticsearch</h2><p>解压elasticsearch-2.4.0.tar.gz，修改配置文件：config/elasticsearch.yml<br><img src="/images/elk-1.png" alt=""></p>
+<p>如果要配置集群，需要两个节点上的elasticsearch配置的cluster.name相同，都启动可以自动组成集群，这里如果不改cluster.name则默认是cluster.name=elasticsearch，node.name随意取但是集群内的各节点不能相同。</p>
+<p>另一个节点配置如下：<br><img src="/images/elk-2.png" alt=""></p>
+<p>安装完成，因为elasticsearch有远程执行脚本的功能，容易中木马病毒，所以不允许用root用户启动，root用户是起不来的，想启动elasticsearch只能用一般的用户启动。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./bin/elasticsearch</span><br><span class="line">./bin/elasticsearch -d <span class="comment">#后台启动</span></span><br></pre></td></tr></table></figure></p>
+<p>但是一般用户在启动Elasticsearch的时候，报错如下<br><img src="/images/elk-15.png" alt=""><br>我们采用sudo chown -R tianzhongqiang elasticsearch-2.4.0 修改一下文件的所有者(组)，就可以执行了</p>
+<p>打开localhost:9200,将会看到以下内容<br><img src="/images/elk-13.png" alt=""></p>
+<p>返回数据中包含配置的cluster_name和name，以及ES的版本等信息。</p>
+<h2 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h2><p>1、elasticsearch-head插件安装<br>在bin目录下安装head插件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./plugin install mobz/elasticsearch-head</span><br></pre></td></tr></table></figure></p>
+<p><img src="/images/elk-3.png" alt=""></p>
+<p>head插件是一个用浏览器跟ES集群交互的插件，可以查看集群状态、集群的doc内容、执行搜索和普通的Rest请求等。<br><a href="http://192.168.1.137:9200/_plugin/head/" target="_blank" rel="noopener">http://192.168.1.137:9200/_plugin/head/</a> 页面来查看ES集群状态<br><img src="/images/elk-14.png" alt=""></p>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><ul>
+<li>要配置network.host才能别的机器或者网卡访问，否则只能是127.0.0.1或者localhost访问</li>
+<li>注意配置yml结尾的配置文件都需要冒号后面加空格才行</li>
+<li>如果是集群最好添加防脑裂配置：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">discovery.zen.ping.multicast.enabled: <span class="literal">false</span></span><br><span class="line">discovery.zen.ping_timeout: 120s</span><br><span class="line">client.transport.ping_timeout: 60s</span><br><span class="line">discovery.zen.ping.unicast.hosts: [<span class="string">"192.168.1.136"</span>,<span class="string">"192.168.1.137"</span>, <span class="string">"192.168.1.138"</span>]</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="安装Kibana"><a href="#安装Kibana" class="headerlink" title="安装Kibana"></a>安装Kibana</h1><p>解压安装，修改配置文件 config/kibana.yml的elasticsearch.url属性即可。<br><img src="/images/elk-4.png" alt=""></p>
+<h2 id="安装插件-1"><a href="#安装插件-1" class="headerlink" title="安装插件"></a>安装插件</h2><h3 id="安装Marvel"><a href="#安装Marvel" class="headerlink" title="安装Marvel"></a>安装Marvel</h3><p>Marvel是Elasticsearch的管理和监控工具，在开发环境下免费使用。它包含了一个叫做Sense的交互式控制台，使用户方便的通过浏览器直接与Elasticsearch进行交互。<br>1、在elasticsearch中安装Marvel<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bin/plugin install license</span><br><span class="line">bin/plugin install marvel-agent</span><br></pre></td></tr></table></figure></p>
+<p>2、在kibana中安装Marvel<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kibana plugin --install elasticsearch/marvel/latest</span><br></pre></td></tr></table></figure></p>
+<p>启动<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bin/elasticsearch</span><br><span class="line">bin/kibana</span><br></pre></td></tr></table></figure></p>
+<p>查看<a href="http://192.168.1.137:5601/app/marvel" target="_blank" rel="noopener">http://192.168.1.137:5601/app/marvel</a> 页面：<br><img src="/images/elk-11.png" alt=""></p>
+<p><img src="/images/elk-12.png" alt=""></p>
+<h3 id="安装Sense"><a href="#安装Sense" class="headerlink" title="安装Sense"></a>安装Sense</h3><p>Sense是flask写的elasticsearch查询工具。<br>支持es查询语言自动提示，es结构自动提示，支持两种主题，支持查询历史记录，支持快捷键。<br>在Kibana目录运行命令安装 Sense插件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/kibana plugin --install elastic/sense</span><br></pre></td></tr></table></figure></p>
+<p>查看<a href="http://192.168.1.137:5601/app/sense" target="_blank" rel="noopener">http://192.168.1.137:5601/app/sense</a> 页面：<br><img src="/images/elk-16.png" alt=""></p>
+<h1 id="安装logstash"><a href="#安装logstash" class="headerlink" title="安装logstash"></a>安装logstash</h1><p>直接解压安装就ok。<br>配置logstash的配置文件<br><img src="/images/elk-5.png" alt=""></p>
+<p>两种启动方式都可以<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/logstash agent -f logstash_log4j_to_es.conf</span><br></pre></td></tr></table></figure></p>
+<p><img src="/images/elk-8.png" alt=""></p>
+<h1 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bin/elasticsearch</span><br><span class="line">bin/kibana</span><br><span class="line">bin/logstash -f logstash_log4j_to_es.conf</span><br></pre></td></tr></table></figure>
+<p>打开：<a href="http://192.168.1.137:5601" target="_blank" rel="noopener">http://192.168.1.137:5601</a><br><img src="/images/elk-6.png" alt=""><br>警告显示，需要我们创建一个索引。</p>
+<h2 id="创建索引："><a href="#创建索引：" class="headerlink" title="创建索引："></a>创建索引：</h2><p>Kibana界面日志检索只有当第一条日志通过Logstash进入ElasticSearch后，才能配置Kibana索引。</p>
+<p>1、在“Index name or pattern”项下，填入一个elasticsearch的索引名，也即是Logstash配置文件中output项下的index对应的名称；在你这里应该是将“logstash-* ” 改成“test_log”<br>2、在“Time-field name”，选用默认的配置：“@timestamp”<br>3、点击“create”即可<br><img src="/images/elk-7.png" alt=""></p>
+<h1 id="log4j日志接入"><a href="#log4j日志接入" class="headerlink" title="log4j日志接入"></a>log4j日志接入</h1><p>编写测试代码<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">package cn.tzq.spider;</span><br><span class="line"></span><br><span class="line">import org.slf4j.Logger;</span><br><span class="line">import org.slf4j.LoggerFactory;</span><br><span class="line"></span><br><span class="line">public class Test &#123;</span><br><span class="line">	Logger logger = LoggerFactory.getLogger(Test.class);</span><br><span class="line">	@org.junit.Test</span><br><span class="line">	public void testName() throws Exception &#123;</span><br><span class="line">		<span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">			long s_time = System.currentTimeMillis();</span><br><span class="line">			logger.info(<span class="string">"当前的时间戳："</span>+s_time);</span><br><span class="line">			logger.warn(<span class="string">"warn："</span>+s_time);</span><br><span class="line">			logger.error(<span class="string">"error："</span>+s_time);</span><br><span class="line">			Thread.sleep(1000L);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>log4j配置<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">log4j.rootLogger=INFO,socket</span><br><span class="line"></span><br><span class="line">log4j.appender.socket=org.apache.log4j.net.SocketAppender</span><br><span class="line">log4j.appender.socket.RemoteHost=192.168.1.137</span><br><span class="line">log4j.appender.socket.Port=4567</span><br><span class="line">log4j.appender.socket.LocationInfo=<span class="literal">true</span></span><br></pre></td></tr></table></figure></p>
+<p>执行代码，观察kibana页面变化<br><img src="/images/elk-9.png" alt=""></p>
+<p>搜索错误信息<br><img src="/images/elk-10.png" alt=""></p>
+<p>如果有问题可以去论坛讨论：<br><a href="https://discuss.elastic.co/categories" target="_blank" rel="noopener">https://discuss.elastic.co/categories</a><br>也可以去中文社区<br><a href="https://elasticsearch.cn/explore/category-2" target="_blank" rel="noopener">https://elasticsearch.cn/explore/category-2</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/elk/" rel="tag"># elk</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/14/elk-1/" rel="next" title="ELK搭建使用">
+                <i class="fa fa-chevron-left"></i> ELK搭建使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/18/maven_1/" rel="prev" title="Maven报错：Missing artifact jdk.tools:jdk.tools:jar:1.7">
+                Maven报错：Missing artifact jdk.tools:jdk.tools:jar:1.7 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">46</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">categories</span>
+                  
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">26</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#部署环境"><span class="nav-number">1.</span> <span class="nav-text">部署环境</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装Elasticsearch集群"><span class="nav-number">2.</span> <span class="nav-text">安装Elasticsearch集群</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装Elasticsearch"><span class="nav-number">2.1.</span> <span class="nav-text">安装Elasticsearch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装插件"><span class="nav-number">2.2.</span> <span class="nav-text">安装插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注意"><span class="nav-number">2.3.</span> <span class="nav-text">注意</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装Kibana"><span class="nav-number">3.</span> <span class="nav-text">安装Kibana</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装插件-1"><span class="nav-number">3.1.</span> <span class="nav-text">安装插件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装Marvel"><span class="nav-number">3.1.1.</span> <span class="nav-text">安装Marvel</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装Sense"><span class="nav-number">3.1.2.</span> <span class="nav-text">安装Sense</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装logstash"><span class="nav-number">4.</span> <span class="nav-text">安装logstash</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#启动"><span class="nav-number">5.</span> <span class="nav-text">启动</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建索引："><span class="nav-number">5.1.</span> <span class="nav-text">创建索引：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#log4j日志接入"><span class="nav-number">6.</span> <span class="nav-text">log4j日志接入</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Muse</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
