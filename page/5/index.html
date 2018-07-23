@@ -286,6 +286,197 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.thinkyixia.com/2017/08/14/elk1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="那个谁">
+      <meta itemprop="description" content="吾资之昏，不逮人也，吾材之庸，不逮人也；旦旦而学之，久而不怠焉，迄乎成，而亦不知其昏与庸也。吾资之聪，倍人也，吾材之敏，倍人也；屏弃而不用，其与昏与庸无以异也。圣人之道，卒于鲁也传之。然则昏庸聪敏之用，岂有常哉？">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="静水流深">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/08/14/elk1/" itemprop="url">
+                  ELK搭建使用
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2017-08-14 00:00:00" itemprop="dateCreated datePublished" datetime="2017-08-14T00:00:00+08:00">2017-08-14</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="部署环境"><a href="#部署环境" class="headerlink" title="部署环境"></a>部署环境</h1><p>Elasticsearch:2.4.0<br>kibana:4.6.0<br>logstash:2.0.0</p>
+<p>注：Elasticsearch、Kibana、Lostash的下载地址统一为<a href="https://www.elastic.co/downloads/" target="_blank" rel="noopener">https://www.elastic.co/downloads/</a></p>
+<h1 id="安装Elasticsearch集群"><a href="#安装Elasticsearch集群" class="headerlink" title="安装Elasticsearch集群"></a>安装Elasticsearch集群</h1><h2 id="安装Elasticsearch"><a href="#安装Elasticsearch" class="headerlink" title="安装Elasticsearch"></a>安装Elasticsearch</h2><p>解压elasticsearch-2.4.0.tar.gz，修改配置文件：config/elasticsearch.yml<br><img src="/images/elk-1.png" alt=""></p>
+<p>如果要配置集群，需要两个节点上的elasticsearch配置的cluster.name相同，都启动可以自动组成集群，这里如果不改cluster.name则默认是cluster.name=elasticsearch，node.name随意取但是集群内的各节点不能相同。</p>
+<p>另一个节点配置如下：<br><img src="/images/elk-2.png" alt=""></p>
+<p>安装完成，因为elasticsearch有远程执行脚本的功能，容易中木马病毒，所以不允许用root用户启动，root用户是起不来的，想启动elasticsearch只能用一般的用户启动。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./bin/elasticsearch</span><br><span class="line">./bin/elasticsearch -d <span class="comment">#后台启动</span></span><br></pre></td></tr></table></figure></p>
+<p>但是一般用户在启动Elasticsearch的时候，报错如下<br><img src="/images/elk-15.png" alt=""><br>我们采用sudo chown -R tianzhongqiang elasticsearch-2.4.0 修改一下文件的所有者(组)，就可以执行了</p>
+<p>打开localhost:9200,将会看到以下内容<br><img src="/images/elk-13.png" alt=""></p>
+<p>返回数据中包含配置的cluster_name和name，以及ES的版本等信息。</p>
+<h2 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h2><p>1、elasticsearch-head插件安装<br>在bin目录下安装head插件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./plugin install mobz/elasticsearch-head</span><br></pre></td></tr></table></figure></p>
+<p><img src="/images/elk-3.png" alt=""></p>
+<p>head插件是一个用浏览器跟ES集群交互的插件，可以查看集群状态、集群的doc内容、执行搜索和普通的Rest请求等。<br><a href="http://192.168.1.137:9200/_plugin/head/" target="_blank" rel="noopener">http://192.168.1.137:9200/_plugin/head/</a> 页面来查看ES集群状态<br><img src="/images/elk-14.png" alt=""></p>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><ul>
+<li>要配置network.host才能别的机器或者网卡访问，否则只能是127.0.0.1或者localhost访问</li>
+<li>注意配置yml结尾的配置文件都需要冒号后面加空格才行</li>
+<li>如果是集群最好添加防脑裂配置：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">discovery.zen.ping.multicast.enabled: <span class="literal">false</span></span><br><span class="line">discovery.zen.ping_timeout: 120s</span><br><span class="line">client.transport.ping_timeout: 60s</span><br><span class="line">discovery.zen.ping.unicast.hosts: [<span class="string">"192.168.1.136"</span>,<span class="string">"192.168.1.137"</span>, <span class="string">"192.168.1.138"</span>]</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="安装Kibana"><a href="#安装Kibana" class="headerlink" title="安装Kibana"></a>安装Kibana</h1><p>解压安装，修改配置文件 config/kibana.yml的elasticsearch.url属性即可。<br><img src="/images/elk-4.png" alt=""></p>
+<h2 id="安装插件-1"><a href="#安装插件-1" class="headerlink" title="安装插件"></a>安装插件</h2><h3 id="安装Marvel"><a href="#安装Marvel" class="headerlink" title="安装Marvel"></a>安装Marvel</h3><p>Marvel是Elasticsearch的管理和监控工具，在开发环境下免费使用。它包含了一个叫做Sense的交互式控制台，使用户方便的通过浏览器直接与Elasticsearch进行交互。<br>1、在elasticsearch中安装Marvel<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bin/plugin install license</span><br><span class="line">bin/plugin install marvel-agent</span><br></pre></td></tr></table></figure></p>
+<p>2、在kibana中安装Marvel<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kibana plugin --install elasticsearch/marvel/latest</span><br></pre></td></tr></table></figure></p>
+<p>启动<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bin/elasticsearch</span><br><span class="line">bin/kibana</span><br></pre></td></tr></table></figure></p>
+<p>查看<a href="http://192.168.1.137:5601/app/marvel" target="_blank" rel="noopener">http://192.168.1.137:5601/app/marvel</a> 页面：<br><img src="/images/elk-11.png" alt=""></p>
+<p><img src="/images/elk-12.png" alt=""></p>
+<h3 id="安装Sense"><a href="#安装Sense" class="headerlink" title="安装Sense"></a>安装Sense</h3><p>Sense是flask写的elasticsearch查询工具。<br>支持es查询语言自动提示，es结构自动提示，支持两种主题，支持查询历史记录，支持快捷键。<br>在Kibana目录运行命令安装 Sense插件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/kibana plugin --install elastic/sense</span><br></pre></td></tr></table></figure></p>
+<p>查看<a href="http://192.168.1.137:5601/app/sense" target="_blank" rel="noopener">http://192.168.1.137:5601/app/sense</a> 页面：<br><img src="/images/elk-16.png" alt=""></p>
+<h1 id="安装logstash"><a href="#安装logstash" class="headerlink" title="安装logstash"></a>安装logstash</h1><p>直接解压安装就ok。<br>配置logstash的配置文件<br><img src="/images/elk-5.png" alt=""></p>
+<p>两种启动方式都可以<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/logstash agent -f logstash_log4j_to_es.conf</span><br></pre></td></tr></table></figure></p>
+<p><img src="/images/elk-8.png" alt=""></p>
+<h1 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bin/elasticsearch</span><br><span class="line">bin/kibana</span><br><span class="line">bin/logstash -f logstash_log4j_to_es.conf</span><br></pre></td></tr></table></figure>
+<p>打开：<a href="http://192.168.1.137:5601" target="_blank" rel="noopener">http://192.168.1.137:5601</a><br><img src="/images/elk-6.png" alt=""><br>警告显示，需要我们创建一个索引。</p>
+<h2 id="创建索引："><a href="#创建索引：" class="headerlink" title="创建索引："></a>创建索引：</h2><p>Kibana界面日志检索只有当第一条日志通过Logstash进入ElasticSearch后，才能配置Kibana索引。</p>
+<p>1、在“Index name or pattern”项下，填入一个elasticsearch的索引名，也即是Logstash配置文件中output项下的index对应的名称；在你这里应该是将“logstash-* ” 改成“test_log”<br>2、在“Time-field name”，选用默认的配置：“@timestamp”<br>3、点击“create”即可<br><img src="/images/elk-7.png" alt=""></p>
+<h1 id="log4j日志接入"><a href="#log4j日志接入" class="headerlink" title="log4j日志接入"></a>log4j日志接入</h1><p>编写测试代码<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">package cn.tzq.spider;</span><br><span class="line"></span><br><span class="line">import org.slf4j.Logger;</span><br><span class="line">import org.slf4j.LoggerFactory;</span><br><span class="line"></span><br><span class="line">public class Test &#123;</span><br><span class="line">	Logger logger = LoggerFactory.getLogger(Test.class);</span><br><span class="line">	@org.junit.Test</span><br><span class="line">	public void testName() throws Exception &#123;</span><br><span class="line">		<span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">			long s_time = System.currentTimeMillis();</span><br><span class="line">			logger.info(<span class="string">"当前的时间戳："</span>+s_time);</span><br><span class="line">			logger.warn(<span class="string">"warn："</span>+s_time);</span><br><span class="line">			logger.error(<span class="string">"error："</span>+s_time);</span><br><span class="line">			Thread.sleep(1000L);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>log4j配置<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">log4j.rootLogger=INFO,socket</span><br><span class="line"></span><br><span class="line">log4j.appender.socket=org.apache.log4j.net.SocketAppender</span><br><span class="line">log4j.appender.socket.RemoteHost=192.168.1.137</span><br><span class="line">log4j.appender.socket.Port=4567</span><br><span class="line">log4j.appender.socket.LocationInfo=<span class="literal">true</span></span><br></pre></td></tr></table></figure></p>
+<p>执行代码，观察kibana页面变化<br><img src="/images/elk-9.png" alt=""></p>
+<p>搜索错误信息<br><img src="/images/elk-10.png" alt=""></p>
+<p>如果有问题可以去论坛讨论：<br><a href="https://discuss.elastic.co/categories" target="_blank" rel="noopener">https://discuss.elastic.co/categories</a><br>也可以去中文社区<br><a href="https://elasticsearch.cn/explore/category-2" target="_blank" rel="noopener">https://elasticsearch.cn/explore/category-2</a></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.thinkyixia.com/2017/08/14/elk-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -478,7 +669,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.thinkyixia.com/2017/08/14/elk1/">
+    <link itemprop="mainEntityOfPage" href="http://www.thinkyixia.com/2017/08/10/flume-taildir-source/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="那个谁">
@@ -497,8 +688,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/14/elk1/" itemprop="url">
-                  ELK搭建使用
+                <a class="post-title-link" href="/2017/08/10/flume-taildir-source/" itemprop="url">
+                  flume1.6 taildir source使用
                 </a>
               
             
@@ -524,7 +715,7 @@
                 
               
 
-              <time title="Created: 2017-08-14 00:00:00" itemprop="dateCreated datePublished" datetime="2017-08-14T00:00:00+08:00">2017-08-14</time>
+              <time title="Created: 2017-08-10 00:00:00" itemprop="dateCreated datePublished" datetime="2017-08-10T00:00:00+08:00">2017-08-10</time>
             
 
             
@@ -578,44 +769,28 @@
       
         
           
-            <h1 id="部署环境"><a href="#部署环境" class="headerlink" title="部署环境"></a>部署环境</h1><p>Elasticsearch:2.4.0<br>kibana:4.6.0<br>logstash:2.0.0</p>
-<p>注：Elasticsearch、Kibana、Lostash的下载地址统一为<a href="https://www.elastic.co/downloads/" target="_blank" rel="noopener">https://www.elastic.co/downloads/</a></p>
-<h1 id="安装Elasticsearch集群"><a href="#安装Elasticsearch集群" class="headerlink" title="安装Elasticsearch集群"></a>安装Elasticsearch集群</h1><h2 id="安装Elasticsearch"><a href="#安装Elasticsearch" class="headerlink" title="安装Elasticsearch"></a>安装Elasticsearch</h2><p>解压elasticsearch-2.4.0.tar.gz，修改配置文件：config/elasticsearch.yml<br><img src="/images/elk-1.png" alt=""></p>
-<p>如果要配置集群，需要两个节点上的elasticsearch配置的cluster.name相同，都启动可以自动组成集群，这里如果不改cluster.name则默认是cluster.name=elasticsearch，node.name随意取但是集群内的各节点不能相同。</p>
-<p>另一个节点配置如下：<br><img src="/images/elk-2.png" alt=""></p>
-<p>安装完成，因为elasticsearch有远程执行脚本的功能，容易中木马病毒，所以不允许用root用户启动，root用户是起不来的，想启动elasticsearch只能用一般的用户启动。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./bin/elasticsearch</span><br><span class="line">./bin/elasticsearch -d <span class="comment">#后台启动</span></span><br></pre></td></tr></table></figure></p>
-<p>但是一般用户在启动Elasticsearch的时候，报错如下<br><img src="/images/elk-15.png" alt=""><br>我们采用sudo chown -R tianzhongqiang elasticsearch-2.4.0 修改一下文件的所有者(组)，就可以执行了</p>
-<p>打开localhost:9200,将会看到以下内容<br><img src="/images/elk-13.png" alt=""></p>
-<p>返回数据中包含配置的cluster_name和name，以及ES的版本等信息。</p>
-<h2 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h2><p>1、elasticsearch-head插件安装<br>在bin目录下安装head插件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./plugin install mobz/elasticsearch-head</span><br></pre></td></tr></table></figure></p>
-<p><img src="/images/elk-3.png" alt=""></p>
-<p>head插件是一个用浏览器跟ES集群交互的插件，可以查看集群状态、集群的doc内容、执行搜索和普通的Rest请求等。<br><a href="http://192.168.1.137:9200/_plugin/head/" target="_blank" rel="noopener">http://192.168.1.137:9200/_plugin/head/</a> 页面来查看ES集群状态<br><img src="/images/elk-14.png" alt=""></p>
-<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><ul>
-<li>要配置network.host才能别的机器或者网卡访问，否则只能是127.0.0.1或者localhost访问</li>
-<li>注意配置yml结尾的配置文件都需要冒号后面加空格才行</li>
-<li>如果是集群最好添加防脑裂配置：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">discovery.zen.ping.multicast.enabled: <span class="literal">false</span></span><br><span class="line">discovery.zen.ping_timeout: 120s</span><br><span class="line">client.transport.ping_timeout: 60s</span><br><span class="line">discovery.zen.ping.unicast.hosts: [<span class="string">"192.168.1.136"</span>,<span class="string">"192.168.1.137"</span>, <span class="string">"192.168.1.138"</span>]</span><br></pre></td></tr></table></figure>
-</li>
+            <h1 id="需求描述"><a href="#需求描述" class="headerlink" title="需求描述"></a>需求描述</h1><p>文件夹下每分钟生成一个文件，而该文件中的数据需要实时读取上报kafka。</p>
+<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>flume1.7中的taildir source正好满足，但是由于线上kafka版本使用的是0.8.2.0，而flume1.7只支持kafka0.9以上的版本。</p>
+<p>官网描述如下：<br><img src="/images/flume-kafka1.png" alt=""><br>意思就是：<br>该版本flume1.7目前支持Kafka 0.9.x系列版本（包含0.9.x以上）。而不再支持Kafka的旧版本（0.8.x）。</p>
+<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>解决方案有两个，一个是升级kafka到0.9.x以上版本，第二个就是将flume1.7的taildir source集成到flume1.6中。这里采用的是第二种。</p>
+<p>集成过程中主要改动的是两个module</p>
+<ul>
+<li>将flume-taildir-source添加到flume-ng-sources</li>
+<li>编译根据提示修改flume-ng-core下的部分文件</li>
 </ul>
-<h1 id="安装Kibana"><a href="#安装Kibana" class="headerlink" title="安装Kibana"></a>安装Kibana</h1><p>解压安装，修改配置文件 config/kibana.yml的elasticsearch.url属性即可。<br><img src="/images/elk-4.png" alt=""></p>
-<h2 id="安装插件-1"><a href="#安装插件-1" class="headerlink" title="安装插件"></a>安装插件</h2><h3 id="安装Marvel"><a href="#安装Marvel" class="headerlink" title="安装Marvel"></a>安装Marvel</h3><p>Marvel是Elasticsearch的管理和监控工具，在开发环境下免费使用。它包含了一个叫做Sense的交互式控制台，使用户方便的通过浏览器直接与Elasticsearch进行交互。<br>1、在elasticsearch中安装Marvel<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bin/plugin install license</span><br><span class="line">bin/plugin install marvel-agent</span><br></pre></td></tr></table></figure></p>
-<p>2、在kibana中安装Marvel<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kibana plugin --install elasticsearch/marvel/latest</span><br></pre></td></tr></table></figure></p>
-<p>启动<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bin/elasticsearch</span><br><span class="line">bin/kibana</span><br></pre></td></tr></table></figure></p>
-<p>查看<a href="http://192.168.1.137:5601/app/marvel" target="_blank" rel="noopener">http://192.168.1.137:5601/app/marvel</a> 页面：<br><img src="/images/elk-11.png" alt=""></p>
-<p><img src="/images/elk-12.png" alt=""></p>
-<h3 id="安装Sense"><a href="#安装Sense" class="headerlink" title="安装Sense"></a>安装Sense</h3><p>Sense是flask写的elasticsearch查询工具。<br>支持es查询语言自动提示，es结构自动提示，支持两种主题，支持查询历史记录，支持快捷键。<br>在Kibana目录运行命令安装 Sense插件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/kibana plugin --install elastic/sense</span><br></pre></td></tr></table></figure></p>
-<p>查看<a href="http://192.168.1.137:5601/app/sense" target="_blank" rel="noopener">http://192.168.1.137:5601/app/sense</a> 页面：<br><img src="/images/elk-16.png" alt=""></p>
-<h1 id="安装logstash"><a href="#安装logstash" class="headerlink" title="安装logstash"></a>安装logstash</h1><p>直接解压安装就ok。<br>配置logstash的配置文件<br><img src="/images/elk-5.png" alt=""></p>
-<p>两种启动方式都可以<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/logstash agent -f logstash_log4j_to_es.conf</span><br></pre></td></tr></table></figure></p>
-<p><img src="/images/elk-8.png" alt=""></p>
-<h1 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bin/elasticsearch</span><br><span class="line">bin/kibana</span><br><span class="line">bin/logstash -f logstash_log4j_to_es.conf</span><br></pre></td></tr></table></figure>
-<p>打开：<a href="http://192.168.1.137:5601" target="_blank" rel="noopener">http://192.168.1.137:5601</a><br><img src="/images/elk-6.png" alt=""><br>警告显示，需要我们创建一个索引。</p>
-<h2 id="创建索引："><a href="#创建索引：" class="headerlink" title="创建索引："></a>创建索引：</h2><p>Kibana界面日志检索只有当第一条日志通过Logstash进入ElasticSearch后，才能配置Kibana索引。</p>
-<p>1、在“Index name or pattern”项下，填入一个elasticsearch的索引名，也即是Logstash配置文件中output项下的index对应的名称；在你这里应该是将“logstash-* ” 改成“test_log”<br>2、在“Time-field name”，选用默认的配置：“@timestamp”<br>3、点击“create”即可<br><img src="/images/elk-7.png" alt=""></p>
-<h1 id="log4j日志接入"><a href="#log4j日志接入" class="headerlink" title="log4j日志接入"></a>log4j日志接入</h1><p>编写测试代码<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">package cn.tzq.spider;</span><br><span class="line"></span><br><span class="line">import org.slf4j.Logger;</span><br><span class="line">import org.slf4j.LoggerFactory;</span><br><span class="line"></span><br><span class="line">public class Test &#123;</span><br><span class="line">	Logger logger = LoggerFactory.getLogger(Test.class);</span><br><span class="line">	@org.junit.Test</span><br><span class="line">	public void testName() throws Exception &#123;</span><br><span class="line">		<span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">			long s_time = System.currentTimeMillis();</span><br><span class="line">			logger.info(<span class="string">"当前的时间戳："</span>+s_time);</span><br><span class="line">			logger.warn(<span class="string">"warn："</span>+s_time);</span><br><span class="line">			logger.error(<span class="string">"error："</span>+s_time);</span><br><span class="line">			Thread.sleep(1000L);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>log4j配置<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">log4j.rootLogger=INFO,socket</span><br><span class="line"></span><br><span class="line">log4j.appender.socket=org.apache.log4j.net.SocketAppender</span><br><span class="line">log4j.appender.socket.RemoteHost=192.168.1.137</span><br><span class="line">log4j.appender.socket.Port=4567</span><br><span class="line">log4j.appender.socket.LocationInfo=<span class="literal">true</span></span><br></pre></td></tr></table></figure></p>
-<p>执行代码，观察kibana页面变化<br><img src="/images/elk-9.png" alt=""></p>
-<p>搜索错误信息<br><img src="/images/elk-10.png" alt=""></p>
-<p>如果有问题可以去论坛讨论：<br><a href="https://discuss.elastic.co/categories" target="_blank" rel="noopener">https://discuss.elastic.co/categories</a><br>也可以去中文社区<br><a href="https://elasticsearch.cn/explore/category-2" target="_blank" rel="noopener">https://elasticsearch.cn/explore/category-2</a></p>
+<h2 id="pom文件修改"><a href="#pom文件修改" class="headerlink" title="pom文件修改"></a>pom文件修改</h2><p>修改flume-taildir-source的pom.xml文件如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span><br><span class="line">&lt;!--</span><br><span class="line">Licensed to the Apache Software Foundation (ASF) under one or more</span><br><span class="line">contributor license agreements.  See the NOTICE file distributed with</span><br><span class="line">this work <span class="keyword">for</span> additional information regarding copyright ownership.</span><br><span class="line">The ASF licenses this file to You under the Apache License, Version 2.0</span><br><span class="line">(the <span class="string">"License"</span>); you may not use this file except <span class="keyword">in</span> compliance with</span><br><span class="line">the License.  You may obtain a copy of the License at</span><br><span class="line"></span><br><span class="line">     http://www.apache.org/licenses/LICENSE-2.0</span><br><span class="line"></span><br><span class="line">Unless required by applicable law or agreed to <span class="keyword">in</span> writing, software</span><br><span class="line">distributed under the License is distributed on an <span class="string">"AS IS"</span> BASIS,</span><br><span class="line">WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span><br><span class="line">See the License <span class="keyword">for</span> the specific language governing permissions and</span><br><span class="line">limitations under the License.</span><br><span class="line">--&gt;</span><br><span class="line"></span><br><span class="line">&lt;project xmlns=<span class="string">"http://maven.apache.org/POM/4.0.0"</span> xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span><br><span class="line">  xsi:schemaLocation=<span class="string">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span>&gt;</span><br><span class="line"></span><br><span class="line">  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</span><br><span class="line"></span><br><span class="line">  &lt;parent&gt;</span><br><span class="line">    &lt;artifactId&gt;flume-ng-sources&lt;/artifactId&gt;</span><br><span class="line">    &lt;groupId&gt;org.apache.flume&lt;/groupId&gt;</span><br><span class="line">    &lt;version&gt;1.6.0&lt;/version&gt;</span><br><span class="line">  &lt;/parent&gt;</span><br><span class="line"></span><br><span class="line">  &lt;groupId&gt;org.apache.flume.flume-ng-sources&lt;/groupId&gt;</span><br><span class="line">  &lt;artifactId&gt;flume-taildir-source&lt;/artifactId&gt;</span><br><span class="line">  &lt;name&gt;Flume Taildir Source&lt;/name&gt;</span><br><span class="line">  &lt;dependencies&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">      &lt;groupId&gt;org.apache.flume&lt;/groupId&gt;</span><br><span class="line">      &lt;artifactId&gt;flume-ng-core&lt;/artifactId&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">      &lt;groupId&gt;junit&lt;/groupId&gt;</span><br><span class="line">      &lt;artifactId&gt;junit&lt;/artifactId&gt;</span><br><span class="line">      &lt;scope&gt;<span class="built_in">test</span>&lt;/scope&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">  &lt;/dependencies&gt;</span><br><span class="line"></span><br><span class="line">&lt;/project&gt;</span><br></pre></td></tr></table></figure></p>
+<p>修改pom文件之后发现程序报错了，报错信息如下：<br><img src="/images/flume-1.png" alt=""></p>
+<p>从错误中可以看到，TaildirSource类中这两个覆写的方法是不存在的。<br>跟着这个思路我们看一下TaildirSource继承和实现的类和接口。<br><img src="/images/flume-3.png" alt=""></p>
+<h2 id="修改flume-ng-core"><a href="#修改flume-ng-core" class="headerlink" title="修改flume-ng-core"></a>修改flume-ng-core</h2><p>查看flume-ng-core1.7的代码，发现这两个方法是实现的接口PollableSource中的方法。而1.6中不存在这两个方法。</p>
+<ul>
+<li>flume-ng-core1.6<br><img src="/images/flume-5.png" alt=""></li>
+<li>flume-ng-core1.7<br><img src="/images/flume-4.png" alt=""></li>
+</ul>
+<p>最简单的方法就是直接将flume-ng-core1.7中PollableSource的内容复制到flume-ng-core1.6中，这样就ok了，其中还有几处编译出错的地方，其他错误跟该错误解决方法一致，参照flume-ng-core1.7的内容修改。</p>
+<p>修改完成之后，将flume-ng-core1.6重新编译，然后再编译flume-taildir-source就可以了。</p>
+<p>编译完成将flume-taildir-source-1.6.0.jar、flume-ng-core-1.6.0.jar放到线上flume的lib下就可以使用了。</p>
+<h1 id="使用样例"><a href="#使用样例" class="headerlink" title="使用样例"></a>使用样例</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">a1.sources = r1</span><br><span class="line">a1.channels = c1</span><br><span class="line">a1.sinks= k1</span><br><span class="line"></span><br><span class="line">a1.sources.r1.type = TAILDIR</span><br><span class="line">a1.sources.r1.channels = c1</span><br><span class="line">a1.sources.r1.positionFile = /var/<span class="built_in">log</span>/flume/taildir_position.json</span><br><span class="line">a1.sources.r1.filegroups = f1 f2</span><br><span class="line">a1.sources.r1.filegroups.f1 = /var/<span class="built_in">log</span>/test1/example.log</span><br><span class="line">a1.sources.r1.headers.f1.headerKey1 = value1</span><br><span class="line">a1.sources.r1.filegroups.f2 = /var/<span class="built_in">log</span>/test2/.*<span class="built_in">log</span>.*</span><br><span class="line">a1.sources.r1.headers.f2.headerKey1 = value2</span><br><span class="line">a1.sources.r1.headers.f2.headerKey2 = value2-2</span><br><span class="line">a1.sources.r1.fileHeader = <span class="literal">true</span></span><br><span class="line">a1.sources.r1.channels = c1</span><br><span class="line"></span><br><span class="line"><span class="comment"># channels 配置</span></span><br><span class="line">a1.channels.c1.type = memory</span><br><span class="line">a1.channels.c1.capacity = 10000000</span><br><span class="line">a1.channels.c1.transactionCapacity = 10000</span><br><span class="line">a1.channels.c1.keep-alive = 3</span><br><span class="line"></span><br><span class="line">a1.sinks.k1.type = org.apache.flume.sink.kafka.KafkaSink</span><br><span class="line">a1.sinks.k1.topic = topic</span><br><span class="line">a1.sinks.k1.brokerList = node1:9092,node2:9092,node3:9092</span><br><span class="line">a1.sinks.k1.requiredAcks = 1</span><br><span class="line">a1.sinks.k1.batchSize = 1000</span><br><span class="line">a1.sinks.k1.channel = c1</span><br></pre></td></tr></table></figure>
+<p>具体参数意义参照flume1.7的官网即可。</p>
 
           
         
@@ -791,181 +966,6 @@
 <p>修改完成之后，将flume-ng-core1.6重新编译，然后再编译flume-taildir-source就可以了。</p>
 <p>编译完成将flume-taildir-source-1.6.0.jar、flume-ng-core-1.6.0.jar放到线上flume的lib下就可以使用了。</p>
 <h2 id="使用样例"><a href="#使用样例" class="headerlink" title="使用样例"></a>使用样例</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">a1.sources = r1</span><br><span class="line">a1.channels = c1</span><br><span class="line">a1.sinks= k1</span><br><span class="line"></span><br><span class="line">a1.sources.r1.type = TAILDIR</span><br><span class="line">a1.sources.r1.channels = c1</span><br><span class="line">a1.sources.r1.positionFile = /var/<span class="built_in">log</span>/flume/taildir_position.json</span><br><span class="line">a1.sources.r1.filegroups = f1 f2</span><br><span class="line">a1.sources.r1.filegroups.f1 = /var/<span class="built_in">log</span>/test1/example.log</span><br><span class="line">a1.sources.r1.headers.f1.headerKey1 = value1</span><br><span class="line">a1.sources.r1.filegroups.f2 = /var/<span class="built_in">log</span>/test2/.*<span class="built_in">log</span>.*</span><br><span class="line">a1.sources.r1.headers.f2.headerKey1 = value2</span><br><span class="line">a1.sources.r1.headers.f2.headerKey2 = value2-2</span><br><span class="line">a1.sources.r1.fileHeader = <span class="literal">true</span></span><br><span class="line">a1.sources.r1.channels = c1</span><br><span class="line"></span><br><span class="line"><span class="comment"># channels 配置</span></span><br><span class="line">a1.channels.c1.type = memory</span><br><span class="line">a1.channels.c1.capacity = 10000000</span><br><span class="line">a1.channels.c1.transactionCapacity = 10000</span><br><span class="line">a1.channels.c1.keep-alive = 3</span><br><span class="line"></span><br><span class="line">a1.sinks.k1.type = org.apache.flume.sink.kafka.KafkaSink</span><br><span class="line">a1.sinks.k1.topic = topic</span><br><span class="line">a1.sinks.k1.brokerList = node1:9092,node2:9092,node3:9092</span><br><span class="line">a1.sinks.k1.requiredAcks = 1</span><br><span class="line">a1.sinks.k1.batchSize = 1000</span><br><span class="line">a1.sinks.k1.channel = c1</span><br></pre></td></tr></table></figure>
-<p>具体参数意义参照flume1.7的官网即可。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.thinkyixia.com/2017/08/10/flume-taildir-source/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="那个谁">
-      <meta itemprop="description" content="吾资之昏，不逮人也，吾材之庸，不逮人也；旦旦而学之，久而不怠焉，迄乎成，而亦不知其昏与庸也。吾资之聪，倍人也，吾材之敏，倍人也；屏弃而不用，其与昏与庸无以异也。圣人之道，卒于鲁也传之。然则昏庸聪敏之用，岂有常哉？">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="静水流深">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/08/10/flume-taildir-source/" itemprop="url">
-                  flume1.6 taildir source使用
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2017-08-10 00:00:00" itemprop="dateCreated datePublished" datetime="2017-08-10T00:00:00+08:00">2017-08-10</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="需求描述"><a href="#需求描述" class="headerlink" title="需求描述"></a>需求描述</h1><p>文件夹下每分钟生成一个文件，而该文件中的数据需要实时读取上报kafka。</p>
-<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>flume1.7中的taildir source正好满足，但是由于线上kafka版本使用的是0.8.2.0，而flume1.7只支持kafka0.9以上的版本。</p>
-<p>官网描述如下：<br><img src="/images/flume-kafka1.png" alt=""><br>意思就是：<br>该版本flume1.7目前支持Kafka 0.9.x系列版本（包含0.9.x以上）。而不再支持Kafka的旧版本（0.8.x）。</p>
-<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>解决方案有两个，一个是升级kafka到0.9.x以上版本，第二个就是将flume1.7的taildir source集成到flume1.6中。这里采用的是第二种。</p>
-<p>集成过程中主要改动的是两个module</p>
-<ul>
-<li>将flume-taildir-source添加到flume-ng-sources</li>
-<li>编译根据提示修改flume-ng-core下的部分文件</li>
-</ul>
-<h2 id="pom文件修改"><a href="#pom文件修改" class="headerlink" title="pom文件修改"></a>pom文件修改</h2><p>修改flume-taildir-source的pom.xml文件如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span><br><span class="line">&lt;!--</span><br><span class="line">Licensed to the Apache Software Foundation (ASF) under one or more</span><br><span class="line">contributor license agreements.  See the NOTICE file distributed with</span><br><span class="line">this work <span class="keyword">for</span> additional information regarding copyright ownership.</span><br><span class="line">The ASF licenses this file to You under the Apache License, Version 2.0</span><br><span class="line">(the <span class="string">"License"</span>); you may not use this file except <span class="keyword">in</span> compliance with</span><br><span class="line">the License.  You may obtain a copy of the License at</span><br><span class="line"></span><br><span class="line">     http://www.apache.org/licenses/LICENSE-2.0</span><br><span class="line"></span><br><span class="line">Unless required by applicable law or agreed to <span class="keyword">in</span> writing, software</span><br><span class="line">distributed under the License is distributed on an <span class="string">"AS IS"</span> BASIS,</span><br><span class="line">WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span><br><span class="line">See the License <span class="keyword">for</span> the specific language governing permissions and</span><br><span class="line">limitations under the License.</span><br><span class="line">--&gt;</span><br><span class="line"></span><br><span class="line">&lt;project xmlns=<span class="string">"http://maven.apache.org/POM/4.0.0"</span> xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span><br><span class="line">  xsi:schemaLocation=<span class="string">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span>&gt;</span><br><span class="line"></span><br><span class="line">  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</span><br><span class="line"></span><br><span class="line">  &lt;parent&gt;</span><br><span class="line">    &lt;artifactId&gt;flume-ng-sources&lt;/artifactId&gt;</span><br><span class="line">    &lt;groupId&gt;org.apache.flume&lt;/groupId&gt;</span><br><span class="line">    &lt;version&gt;1.6.0&lt;/version&gt;</span><br><span class="line">  &lt;/parent&gt;</span><br><span class="line"></span><br><span class="line">  &lt;groupId&gt;org.apache.flume.flume-ng-sources&lt;/groupId&gt;</span><br><span class="line">  &lt;artifactId&gt;flume-taildir-source&lt;/artifactId&gt;</span><br><span class="line">  &lt;name&gt;Flume Taildir Source&lt;/name&gt;</span><br><span class="line">  &lt;dependencies&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">      &lt;groupId&gt;org.apache.flume&lt;/groupId&gt;</span><br><span class="line">      &lt;artifactId&gt;flume-ng-core&lt;/artifactId&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">      &lt;groupId&gt;junit&lt;/groupId&gt;</span><br><span class="line">      &lt;artifactId&gt;junit&lt;/artifactId&gt;</span><br><span class="line">      &lt;scope&gt;<span class="built_in">test</span>&lt;/scope&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">  &lt;/dependencies&gt;</span><br><span class="line"></span><br><span class="line">&lt;/project&gt;</span><br></pre></td></tr></table></figure></p>
-<p>修改pom文件之后发现程序报错了，报错信息如下：<br><img src="/images/flume-1.png" alt=""></p>
-<p>从错误中可以看到，TaildirSource类中这两个覆写的方法是不存在的。<br>跟着这个思路我们看一下TaildirSource继承和实现的类和接口。<br><img src="/images/flume-3.png" alt=""></p>
-<h2 id="修改flume-ng-core"><a href="#修改flume-ng-core" class="headerlink" title="修改flume-ng-core"></a>修改flume-ng-core</h2><p>查看flume-ng-core1.7的代码，发现这两个方法是实现的接口PollableSource中的方法。而1.6中不存在这两个方法。</p>
-<ul>
-<li>flume-ng-core1.6<br><img src="/images/flume-5.png" alt=""></li>
-<li>flume-ng-core1.7<br><img src="/images/flume-4.png" alt=""></li>
-</ul>
-<p>最简单的方法就是直接将flume-ng-core1.7中PollableSource的内容复制到flume-ng-core1.6中，这样就ok了，其中还有几处编译出错的地方，其他错误跟该错误解决方法一致，参照flume-ng-core1.7的内容修改。</p>
-<p>修改完成之后，将flume-ng-core1.6重新编译，然后再编译flume-taildir-source就可以了。</p>
-<p>编译完成将flume-taildir-source-1.6.0.jar、flume-ng-core-1.6.0.jar放到线上flume的lib下就可以使用了。</p>
-<h1 id="使用样例"><a href="#使用样例" class="headerlink" title="使用样例"></a>使用样例</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">a1.sources = r1</span><br><span class="line">a1.channels = c1</span><br><span class="line">a1.sinks= k1</span><br><span class="line"></span><br><span class="line">a1.sources.r1.type = TAILDIR</span><br><span class="line">a1.sources.r1.channels = c1</span><br><span class="line">a1.sources.r1.positionFile = /var/<span class="built_in">log</span>/flume/taildir_position.json</span><br><span class="line">a1.sources.r1.filegroups = f1 f2</span><br><span class="line">a1.sources.r1.filegroups.f1 = /var/<span class="built_in">log</span>/test1/example.log</span><br><span class="line">a1.sources.r1.headers.f1.headerKey1 = value1</span><br><span class="line">a1.sources.r1.filegroups.f2 = /var/<span class="built_in">log</span>/test2/.*<span class="built_in">log</span>.*</span><br><span class="line">a1.sources.r1.headers.f2.headerKey1 = value2</span><br><span class="line">a1.sources.r1.headers.f2.headerKey2 = value2-2</span><br><span class="line">a1.sources.r1.fileHeader = <span class="literal">true</span></span><br><span class="line">a1.sources.r1.channels = c1</span><br><span class="line"></span><br><span class="line"><span class="comment"># channels 配置</span></span><br><span class="line">a1.channels.c1.type = memory</span><br><span class="line">a1.channels.c1.capacity = 10000000</span><br><span class="line">a1.channels.c1.transactionCapacity = 10000</span><br><span class="line">a1.channels.c1.keep-alive = 3</span><br><span class="line"></span><br><span class="line">a1.sinks.k1.type = org.apache.flume.sink.kafka.KafkaSink</span><br><span class="line">a1.sinks.k1.topic = topic</span><br><span class="line">a1.sinks.k1.brokerList = node1:9092,node2:9092,node3:9092</span><br><span class="line">a1.sinks.k1.requiredAcks = 1</span><br><span class="line">a1.sinks.k1.batchSize = 1000</span><br><span class="line">a1.sinks.k1.channel = c1</span><br></pre></td></tr></table></figure>
 <p>具体参数意义参照flume1.7的官网即可。</p>
 
           
